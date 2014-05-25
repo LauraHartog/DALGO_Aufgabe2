@@ -1,38 +1,21 @@
-clear all;close all;clc
+clear
+clc
+close all
 
-profile('on');
+profile('on')
 
-airpar.fs = 48e3;
-airpar.channel = 1;
+elev = '0';
+azimuth = '090';  % drei stellen!
 
-%--------------------------------------------------------------------------
-% Example 2
-%--------------------------------------------------------------------------
-% Binaural RIR of Stairway
-% Distance: 2m
-% With dummy head
-% left and right channel
-% 15° Azimuth angle
-airpar.rir_type = 1;
-airpar.room = 11;
-airpar.head = 1;
-airpar.rir_no = 2;
-airpar.azimuth = 90;
+pathname = strcat('H', elev, 'e', azimuth, 'a.wav');
+filename = 'Mann_short.wav';
 
-airpar.channel = 1;
-[h_left,air_info] = load_air(airpar);
-airpar.channel = 0;
-[h_right,air_info] = load_air(airpar);
+[data, fs] = audioread(filename);
+[HRTFdata, fs] = wavread(pathname);
 
-[data, fs] = wavread('Mann_short.wav', [1, 1024]);
-
-conv_data_l = conv(data, h_left);
-conv_data_r = conv(data, h_right);
-
-conv_data = [conv_data_l', conv_data_r'];
-
-
-
-sound(conv_data, fs)
+convdata_links = conv(data, HRTFdata(:,1));
+convdata_rechts = conv(data, HRTFdata(:,2));
+convdata = [convdata_links, convdata_rechts];
+sound(convdata, fs)
 
 profile('viewer')
