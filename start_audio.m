@@ -45,7 +45,9 @@ msound('openwrite', out_dev, fs_audio, block_size_out, out_chans);
 complete_data = [];
 for idx=1:block_size:samples
     
-    global deg;
+    drawnow;
+    deg = str2num(get(data.azdir_edit, 'string'));
+
     
     interp_l = interp1(angles_elev0, hrtf_l_elev0, deg);
     interp_r = interp1(angles_elev0, hrtf_r_elev0, deg);
@@ -81,7 +83,7 @@ for idx=1:block_size:samples
     %}
     msound('putsamples', conv_data);
     
-    complete_data = vertcat(complete_data, conv_data);
+    %complete_data = vertcat(complete_data, conv_data);
     
 end
 
