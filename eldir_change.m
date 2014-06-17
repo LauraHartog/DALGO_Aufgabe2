@@ -2,7 +2,9 @@ function eldir_change(handle, event)
 
 data = guidata(handle);
 
-[x, y] = ginput(1);
+cP = get(data.elev_axes,'Currentpoint');
+x = cP(1,1);
+y = cP(1,2);
 
 if x >= 0 && y >= 0
     
