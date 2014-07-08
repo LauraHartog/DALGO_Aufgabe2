@@ -2,14 +2,15 @@ clear all;
 close all;
 clc;
 
-elev = '-20';
-    
+elev = '80';
+
+step = 30;
 idx = 1;
 angles_elev0 = [];
 hrtf_l_elev0 = [];
 hrtf_r_elev0 = [];
 
-for angl = 0:5:180
+for angl = 0:step:180
     
 angles_elev0 = [angles_elev0, angl];
    
@@ -41,12 +42,12 @@ idx = idx + 1;
 end
 
 
-angl = 175;
+angl = 150;
 idx = 1;
 
-for angl = 175:-5:0
+for angl = 150:-step:0
 
-    angles_elev0 = [angles_elev0, (angl + (idx)*10)];
+    angles_elev0 = [angles_elev0, (angl + (idx)*step*2)];
    
 azimuth = num2str(angl);
 
@@ -75,38 +76,27 @@ idx = idx + 1;
 
 end
 
-load angles_elev_min20
-load angles_elev_min10
-load angles_elev0
-load angles_elev10
-load angles_elev20
-elev_angles = [-20, -10, 0, 10, 20];
 
-load hrtf_l_elev_min20
-load hrtf_l_elev_min10
-load hrtf_l_elev0
-load hrtf_l_elev10
-load hrtf_l_elev20
+%%% nur bei 50 Grad notwendig!!!
+%{
+angles_elev0 = [angles_elev0, 360];
 
-load hrtf_r_elev_min20
-load hrtf_r_elev_min10
-load hrtf_r_elev0
-load hrtf_r_elev10
-load hrtf_r_elev20
+pathname = ['H', elev, 'e', '000', 'a.wav'];
+hrtf = wavread(pathname);
+hrtf_l_elev0 = vertcat(hrtf_l_elev0, hrtf(:,2)');
+hrtf_r_elev0 = vertcat(hrtf_r_elev0, hrtf(:,1)');
 
-hrtf_2d_l = zeros(5, 73, 128);
-hrtf_2d_l(1,:,:) = hrtf_l_elev_min20;
-hrtf_2d_l(2,:,:) = hrtf_l_elev_min10;
-hrtf_2d_l(3,:,:) = hrtf_l_elev0;
-hrtf_2d_l(4,:,:) = hrtf_l_elev10;
-hrtf_2d_l(5,:,:) = hrtf_l_elev20;
+%}
+%%% nur bei 50 Grad notwendig!!!
 
-azim_winkel = 91.1;
-elev_winkel = 19.22;
+hrtf_l_elev80 = hrtf_l_elev0;
+hrtf_r_elev80 = hrtf_r_elev0;
+angles_elev80 = angles_elev0;
 
-[x, y] = meshgrid(angles_elev0, elev_angles');
+save hrtf_l_elev80.mat hrtf_l_elev80
+save hrtf_r_elev80.mat hrtf_r_elev80
+save angles_elev80.mat angles_elev80
 
-hrtf_2d_l_interp = interp2(x, y, hrtf_2d_l, azim_winkel, elev_winkel);
 
 %hrtf_2d_r = zeros(73, 128, 5);        
 %hrtf_2d_r(:,:,:) = [hrtf_r_elev_min20;...

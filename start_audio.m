@@ -21,32 +21,19 @@ out_chans = 2;
 
 block_size_out = block_size;
 
-%{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%% Test
-
-elev = '0';
-azimuth = '090';  % drei stellen!
-pathname = strcat('H', elev, 'e', azimuth, 'a.wav');
-    
-[data_hrtf, fs_hrtf] = wavread(pathname);
-
-
-data_audio = wavread(filename);
-conv_data_l = conv(data_audio, data_hrtf(:,1), 'same');
-conv_data_r = conv(data_audio, data_hrtf(:,2), 'same');
-conv_data_m = [conv_data_l, conv_data_r];
-
-sound(conv_data_m, fs_hrtf);
-
-%%%%%%%%%%%%%%%%%%%%%%%%% Test
-%}
-
 msound('openwrite', out_dev, fs_audio, block_size_out, out_chans);
 complete_data = [];
+<<<<<<< HEAD
 conv_puffer = zeros(127,2);
+=======
+conv_puffer = zeros(127,2); % 127 = hrtf - 1
+>>>>>>> 5be5918c66e40d9f4cad4762ec893b98aebcf580
 
 for idx=1:block_size:samples
     
+    set(data.azi_panel, 'buttondownfcn', @azdir_change);
+    set(data.elev_panel, 'buttondownfcn', @eldir_change);
+
     drawnow;
     deg = str2num(get(data.azdir_edit, 'string'));
 
@@ -69,23 +56,17 @@ for idx=1:block_size:samples
     conv_data_r = conv(data_audio, interp_r);
     conv_data = [conv_data_l(1:block_size), conv_data_r(1:block_size)];
     conv_data(1:127,:) = conv_data(1:127,:) + conv_puffer;
+<<<<<<< HEAD
     
     conv_puffer = [conv_data_l(block_size + 1:end), conv_data_r(block_size + 1:end)];
 
     %{
     %%%% Daten einlesen nach Eva & Lenas Methode
+=======
+>>>>>>> 5be5918c66e40d9f4cad4762ec893b98aebcf580
     
-    load 'hrir_final_KEMAR_large.mat'
-    h_l = squeeze(hrir_l(1,1,:));
-    h_r = squeeze(hrir_r(1,1,:));
+    conv_puffer = [conv_data_l(block_size + 1: end), conv_data_r(block_size + 1: end)];
     
-    conv_data_l = filter(h_l,1,data_audio);
-    conv_data_r = filter(h_r,1,data_audio);
-    conv_data = [conv_data_l, conv_data_r];
-    
-    %conv_data = [data_audio*0.8, data_audio*0.4];
-    
-    %}
     msound('putsamples', conv_data);
     
     %complete_data = vertcat(complete_data, conv_data);
