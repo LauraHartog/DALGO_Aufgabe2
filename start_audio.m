@@ -43,6 +43,8 @@ sound(conv_data_m, fs_hrtf);
 
 msound('openwrite', out_dev, fs_audio, block_size_out, out_chans);
 complete_data = [];
+conv_puffer = zeros(127,2);
+
 for idx=1:block_size:samples
     
     drawnow;
@@ -63,10 +65,13 @@ for idx=1:block_size:samples
     end
     
     
-    conv_data_l = conv(data_audio, interp_l, 'same');
-    conv_data_r = conv(data_audio, interp_r, 'same');
-    conv_data = [conv_data_l, conv_data_r];
+    conv_data_l = conv(data_audio, interp_l);
+    conv_data_r = conv(data_audio, interp_r);
+    conv_data = [conv_data_l(1:block_size), conv_data_r(1:block_size)];
+    conv_data(1:127,:) = conv_data(1:127,:) + conv_puffer;
     
+    conv_puffer = [conv_data_l(block_size + 1:end), conv_data_r(block_size + 1:end)];
+
     %{
     %%%% Daten einlesen nach Eva & Lenas Methode
     
