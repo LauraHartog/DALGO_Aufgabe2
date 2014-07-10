@@ -1,8 +1,4 @@
 function start_audio(handle, event)
-%profile('on')
-load hrtf_r_elev0.mat
-load hrtf_l_elev0.mat
-load angles_elev0.mat
 
 % for-schleife, welche alle hrtf-Daten, sowie zugehörige Winkel lädt
 
@@ -90,12 +86,10 @@ for idx=1:block_size:samples
     
     msound('putsamples', conv_data);
     
-    %complete_data = vertcat(complete_data, conv_data);
+
 
 end
 
 msound('close')
-
-%profile('viewer')
 
 end
