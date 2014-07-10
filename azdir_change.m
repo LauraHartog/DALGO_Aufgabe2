@@ -26,7 +26,7 @@ elseif x < 0 && y >= 0
     
 end
 
-deg = deg*360/(2*pi); % Radianwinkel in Degreewinkel umwandeln
+deg = round(deg*360/(2*pi)); % Radianwinkel in Degreewinkel umwandeln
 
 set(data.azdir_edit, 'string', deg);
 
